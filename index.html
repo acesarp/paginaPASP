@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <script src="lib/jquery/jquery.min.js"></script>
+    <title>ClientApp</title>
+</head>
+<body>
+    <h2>Lab07 app</h2>
+    <button id="btnGetParties">Get list of parties!</button>
+    <pre id="preOutput"></pre>
+    <script>
+        $(function () {
+            var getParties = function () {
+                var url = "https://localhost:5001/api/parties/";
+                $.get(url).always(showResponse);
+                return false;
+            };
+
+            var showResponse = function (object) {
+                $("#preOutput").text(JSON.stringify(object, null, 4));
+            };
+
+            $("#btnGetParties").click(getParties);
+        });
+
+    </script>
+
+    <h3>Add your party:</h3>
+
+        <form id="form1" action="https://localhost:5001/api/parties" method="post">
+            <input type="text" id="partyName" name="name" placeholder="Party name" value="anniversary" required /><br />
+            <input type="text" id="date" name="date" placeholder="Date of the party" value="2014-12-31" required /><br />
+            <input type="number" id="numOfGuests" name="number" placeholder="Number of guests" value="43" required /><br />
+            <input type="text" id="address" name="address" placeholder="Address" value="Surrey St" required /><br />
+            <input type="submit" id="submit" />
+        </form>
+
+    <pre id="response"></pre>
+    <script  type="text/javascript">
+        
+        $(function () {
+
+            var body = {
+                "partyName": $("#partyName").val().toString(),
+                "PartyDate": $("#date").val().toString(),
+                "NumberOfGuests": $("#numOfGuests").val(),
+                "Location": $("#address").val()
+            };
+            //var dataAsString = JSON.stringify(data);
+            //console.log(dataAsString);
+            var _url = 'https://localhost:5001/api/parties';
+            
+            $("#form1").submit(function () {
+
+                console.log("data1: ", body);
+                //console.log("data2: ", JSON.parse(body));
+                $.ajax({
+                    //dataType: "json",
+                    type: "POST",
+                    data: JSON.stringify(body),
+                    url: _url,
+                    contentType: "application/json"
+
+                });
+                /*.fail(function (xhr, status, error) {
+                    console.log("xhr=> " + xhr.toString() +
+                        "status=> " + status.toString() +
+                        "error=> " + error.toString());
+                })*/
+                //$("#results").text(response);
+            });
+            
+        });
+
+    </script>
+    <div id="results"></div>
+
+</body>
+</html>
